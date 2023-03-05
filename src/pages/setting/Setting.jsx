@@ -1,6 +1,9 @@
 import React from "react";
+import { useAuthContext } from "../../store/contexts/authContext";
 
 const Setting = () => {
+  const { handleSetLogout } = useAuthContext();
+
   return (
     <div className="settings-page">
       <div className="container page">
@@ -51,7 +54,10 @@ const Setting = () => {
               </fieldset>
             </form>
             <hr />
-            <button className="btn btn-outline-danger">
+            <button
+              className="btn btn-outline-danger"
+              onClick={handleSetLogout}
+            >
               Or click here to logout.
             </button>
           </div>

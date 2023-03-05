@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { validDate } from "../actions/validDate";
+import { validDate } from "../ulities/validDate";
 
 const Article = ({ article }) => {
+  console.log(article);
   return (
     <div className="article-preview">
       <div className="article-meta">
@@ -17,7 +18,7 @@ const Article = ({ article }) => {
           <i className="ion-heart" /> {article.favoritesCount}
         </button>
       </div>
-      <Link to="" className="preview-link">
+      <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>

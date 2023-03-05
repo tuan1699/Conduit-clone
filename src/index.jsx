@@ -6,6 +6,10 @@ import Article from "./pages/article/Article";
 import Setting from "./pages/setting/Setting";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
+import Profile from "./pages/profile/Profile";
+import DetailArticle from "./pages/article/DetailArticle";
+
+import { AuthProvider } from "./store/contexts/authContext";
 
 import {
   createBrowserRouter,
@@ -25,6 +29,8 @@ const routes = createRoutesFromElements(
     <Route path="/settings" element={<Setting />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
+    <Route path="/profile" element={<Profile />} />
+    <Route path="/article/:slug" element={<DetailArticle />} />
   </Route>
 );
 
@@ -33,6 +39,8 @@ const router = createBrowserRouter(routes);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
