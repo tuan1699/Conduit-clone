@@ -3,9 +3,7 @@ import { useAuthContext } from "../../store/contexts/authContext";
 
 const Profile = () => {
   const { state } = useAuthContext();
-  const { isAuthenticated, user } = state;
-
-  console.log(user);
+  const { user } = state;
 
   return (
     <>
@@ -19,7 +17,6 @@ const Profile = () => {
                 <p>{user.bio}</p>
                 <button className="btn btn-sm btn-outline-secondary action-btn">
                   <i className="ion-plus-round" />
-                  {/* &nbsp; Follow Eric Simons */}
                   &nbsp; Edit Profile Settings
                 </button>
               </div>

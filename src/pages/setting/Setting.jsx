@@ -1,11 +1,16 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../../store/contexts/authContext";
 
 const Setting = () => {
   const { handleSetLogout } = useAuthContext();
+  const { state } = useAuthContext();
+  const { user } = state;
 
   return (
     <div className="settings-page">
+      {!user && <Navigate to="/" replace={true} />}
+
       <div className="container page">
         <div className="row">
           <div className="col-md-6 offset-md-3 col-xs-12">

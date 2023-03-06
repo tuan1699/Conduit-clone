@@ -1,6 +1,6 @@
 import React from "react";
 
-const Article = () => {
+const NewArticle = () => {
   return (
     <div className="editor-page">
       <div className="container page">
@@ -53,4 +53,4 @@ const Article = () => {
   );
 };
 
-export default Article;
+export default NewArticle;

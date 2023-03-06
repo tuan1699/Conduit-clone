@@ -1,21 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { fetchDetail } from "../../ulities/callApi";
+import {
+  fetchComments,
+  fetchDetail,
+  postComment,
+  deleteComment,
+} from "../../ulities/callApi";
 import { validDate } from "../../ulities/validDate";
+import FollowBtn from "../../components/FollowBtn";
+import Favourite from "../../components/Favourite";
+import InputComment from "./InputComment";
+import Comment from "./Comment";
 
 const DetailArticle = () => {
   const [detailData, setDetailData] = useState(null);
+  const [comments, setComments] = useState(null);
   const location = useLocation();
   const slug = location.pathname.slice(9);
 
   useEffect(() => {
     fetchDetail(slug)
       .then((data) => {
-        console.log(data.article);
         setDetailData(data.article);
+        fetchComments(slug).then((dataComment) => {
+          setComments(dataComment.comments);
+        });
       })
       .catch((err) => console.log(err));
   }, []);
+
+  const handleComment = (newComment) => {
+    postComment(slug, {
+      comment: {
+        body: newComment,
+      },
+    })
+      .then((data) => {
+        console.log(data);
+        const newComments = [...comments, data.comment];
+        setComments(newComments);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleDeleteComment = (id) => {
+    deleteComment(slug, id)
+      .then(() => {
+        const indexComment = comments.findIndex((comment) => comment.id === id);
+        const newComments = [...comments];
+        newComments.splice(indexComment, 1);
+        setComments(newComments);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -39,17 +76,17 @@ const DetailArticle = () => {
                     {validDate(detailData.createdAt)}
                   </span>
                 </div>
-                <button className="btn btn-sm btn-outline-secondary">
-                  <i className="ion-plus-round" />
-                  &nbsp; Follow {detailData.author.username}{" "}
-                  <span className="counter">(10)</span>
-                </button>
+                <FollowBtn
+                  isFollowing={detailData.author.following}
+                  username={detailData.author.username}
+                />
                 &nbsp;&nbsp;
-                <button className="btn btn-sm btn-outline-primary">
-                  <i className="ion-heart" />
-                  &nbsp; Favorite Post{" "}
-                  <span className="counter">({detailData.favoritesCount})</span>
-                </button>
+                <Favourite
+                  favoitesCount={detailData.favoritesCount}
+                  favorited={detailData.favorited}
+                  slug={detailData.slug}
+                  title="Favorite Post"
+                />
               </div>
             </div>
           </div>
@@ -69,73 +106,41 @@ const DetailArticle = () => {
                   />
                 </Link>
                 <div className="info">
-                  <a href className="author">
-                    {detailData.author.username}
-                  </a>
+                  <Link className="author">{detailData.author.username}</Link>
                   <span className="date">
                     {validDate(detailData.createdAt)}
                   </span>
                 </div>
-                <button className="btn btn-sm btn-outline-secondary">
-                  <i className="ion-plus-round" />
-                  &nbsp; Follow {detailData.author.username}{" "}
-                </button>
-                &nbsp;
-                <button className="btn btn-sm btn-outline-primary">
-                  <i className="ion-heart" />
-                  &nbsp; Favorite Post{" "}
-                  <span className="counter">({detailData.favoritesCount})</span>
-                </button>
+                <FollowBtn
+                  isFollowing={detailData.author.following}
+                  username={detailData.author.username}
+                />
+                &nbsp;&nbsp;
+                <Favourite
+                  favoitesCount={detailData.favoritesCount}
+                  favorited={detailData.favorited}
+                  slug={detailData.slug}
+                  title="Favorite Post"
+                />
               </div>
             </div>
             <div className="row">
               <div className="col-xs-12 col-md-8 offset-md-2">
-                <form className="card comment-form">
-                  <div className="card-block">
-                    <textarea
-                      className="form-control"
-                      placeholder="Write a comment..."
-                      rows={3}
-                      defaultValue={""}
-                    />
-                  </div>
-                  <div className="card-footer">
-                    <img
-                      src={detailData.author.image}
-                      alt={detailData.author.username}
-                    />
-                    <button className="btn btn-sm btn-primary">
-                      Post Comment
-                    </button>
-                  </div>
-                </form>
+                <InputComment
+                  imageUser={detailData.author.image}
+                  username={detailData.author.username}
+                  handleComment={handleComment}
+                />
 
                 {/* Comment Component */}
-                <div className="card">
-                  <div className="card-block">
-                    <p className="card-text">
-                      With supporting text below as a natural lead-in to
-                      additional content.
-                    </p>
-                  </div>
-                  <div className="card-footer">
-                    <Link href className="comment-author">
-                      <img
-                        src="http://i.imgur.com/Qr71crq.jpg"
-                        className="comment-author-img"
-                      />
-                    </Link>
-                    &nbsp;
-                    <Link href className="comment-author">
-                      Jacob Schmidt
-                    </Link>
-                    <span className="date-posted">Dec 29th</span>
-                    <span className="mod-options">
-                      <i className="ion-edit" />
-                      <i className="ion-trash-a" />
-                    </span>
-                  </div>
-                </div>
+                {comments &&
+                  comments.map((comment, index) => (
+                    <Comment
+                      comment={comment}
+                      key={index}
+                      handleDeleteComment={handleDeleteComment}
+                    />
+                  ))}
               </div>
             </div>
           </div>

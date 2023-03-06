@@ -1,22 +1,27 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { validDate } from "../ulities/validDate";
+import Favourite from "./Favourite";
 
 const Article = ({ article }) => {
-  console.log(article);
   return (
     <div className="article-preview">
       <div className="article-meta">
-        <Link to="">
+        <Link to={`/${article.author.username}`}>
           <img src={article.author.image} />
         </Link>
         <div className="info">
-          <Link className="author">{article.author.username}</Link>
+          <Link to={`/${article.author.username}`} className="author">
+            {article.author.username}
+          </Link>
           <span className="date">{validDate(article.createdAt)}</span>
         </div>
-        <button className="btn btn-outline-primary btn-sm pull-xs-right">
-          <i className="ion-heart" /> {article.favoritesCount}
-        </button>
+        <Favourite
+          favoitesCount={article.favoritesCount}
+          favorited={article.favorited}
+          slug={article.slug}
+          right="pull-xs-right"
+        />
       </div>
       <Link to={`/article/${article.slug}`} className="preview-link">
         <h1>{article.title}</h1>
