@@ -1,4 +1,9 @@
-import { LOGIN, LOGOUT, LOGIN_SUCCESS } from "../../ulities/constant";
+import {
+  LOGIN,
+  LOGOUT,
+  LOGIN_SUCCESS,
+  UPDATE_USER,
+} from "../../ulities/constant";
 
 export const initAuthState = {
   isAuthenticated: false,
@@ -23,6 +28,11 @@ export const authReducer = (state, action) => {
       return {
         ...state,
         isAuthenticated: true,
+        user: action.payload,
+      };
+    case UPDATE_USER:
+      return {
+        ...state,
         user: action.payload,
       };
     default:

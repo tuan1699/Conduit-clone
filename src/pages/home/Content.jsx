@@ -15,11 +15,11 @@ const Content = () => {
   const [articles, setArticles] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState();
-  const [currentTab, setCurrentTab] = useState("global-feed");
   const [tags, setTags] = useState(null);
   const [selectedTag, setSelectedTag] = useState("");
   const { state } = useAuthContext();
   const { isAuthenticated } = state;
+  const [currentTab, setCurrentTab] = useState("global-feed");
 
   const handleSelectTag = (tagActive) => {
     setCurrentPage(0);

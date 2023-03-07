@@ -58,11 +58,7 @@ const Header = () => {
                   }
                   to="/profile"
                 >
-                  <img
-                    src="https://api.realworld.io/images/smiley-cyrus.jpeg"
-                    alt=""
-                    className="user-pic"
-                  />
+                  <img src={user?.image} alt="" className="user-pic" />
                   {user.username}
                 </Link>
               </li>

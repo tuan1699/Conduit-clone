@@ -9,7 +9,7 @@ const Comment = ({ comment, handleDeleteComment }) => {
         <p className="card-text">{comment.body}</p>
       </div>
       <div className="card-footer">
-        <Link href className="comment-author">
+        <Link className="comment-author">
           <img
             src={comment.author.image}
             alt={comment.author.username}
@@ -17,9 +17,7 @@ const Comment = ({ comment, handleDeleteComment }) => {
           />
         </Link>
         &nbsp;
-        <Link href className="comment-author">
-          {comment.author.username}
-        </Link>
+        <Link className="comment-author">{comment.author.username}</Link>
         <span className="date-posted">{validDate(comment.createdAt)}</span>
         <span className="mod-options">
           <i className="ion-edit" />

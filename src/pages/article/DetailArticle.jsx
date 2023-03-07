@@ -11,6 +11,9 @@ import FollowBtn from "../../components/FollowBtn";
 import Favourite from "../../components/Favourite";
 import InputComment from "./InputComment";
 import Comment from "./Comment";
+import { useAuthContext } from "../../store/contexts/authContext";
+import EditArticleBtn from "../../components/EditArticleBtn";
+import DeleteArticleBtn from "../../components/DeleteArticleBtn";
 
 const DetailArticle = () => {
   const [detailData, setDetailData] = useState(null);
@@ -18,13 +21,21 @@ const DetailArticle = () => {
   const location = useLocation();
   const slug = location.pathname.slice(9);
 
+  const { state } = useAuthContext();
+  const { user } = state;
+
   useEffect(() => {
     fetchDetail(slug)
       .then((data) => {
         setDetailData(data.article);
-        fetchComments(slug).then((dataComment) => {
-          setComments(dataComment.comments);
-        });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    fetchComments(slug)
+      .then((dataComment) => {
+        setComments(dataComment.comments);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -36,7 +47,6 @@ const DetailArticle = () => {
       },
     })
       .then((data) => {
-        console.log(data);
         const newComments = [...comments, data.comment];
         setComments(newComments);
       })
@@ -62,31 +72,41 @@ const DetailArticle = () => {
             <div className="container">
               <h1>{detailData.title}</h1>
               <div className="article-meta">
-                <Link href>
+                <Link >
                   <img
                     src={detailData.author.image}
                     alt={detailData.author.username}
                   />
                 </Link>
                 <div className="info">
-                  <Link href className="author">
+                  <Link  className="author">
                     {detailData.author.username}
                   </Link>
                   <span className="date">
                     {validDate(detailData.createdAt)}
                   </span>
                 </div>
-                <FollowBtn
-                  isFollowing={detailData.author.following}
-                  username={detailData.author.username}
-                />
-                &nbsp;&nbsp;
-                <Favourite
-                  favoitesCount={detailData.favoritesCount}
-                  favorited={detailData.favorited}
-                  slug={detailData.slug}
-                  title="Favorite Post"
-                />
+                {user.username === detailData.author.username ? (
+                  <>
+                    <EditArticleBtn slug={slug} />
+                    &nbsp;&nbsp;
+                    <DeleteArticleBtn slug={slug} />
+                  </>
+                ) : (
+                  <>
+                    <FollowBtn
+                      isFollowing={detailData.author.following}
+                      username={detailData.author.username}
+                    />
+                    &nbsp;&nbsp;
+                    <Favourite
+                      favoitesCount={detailData.favoritesCount}
+                      favorited={detailData.favorited}
+                      slug={detailData.slug}
+                      title="Favorite Post"
+                    />
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -99,10 +119,11 @@ const DetailArticle = () => {
             <hr />
             <div className="article-actions">
               <div className="article-meta">
-                <Link href="profile.html">
+                <Link>
                   <img
                     src={detailData.author.image}
                     alt={detailData.author.username}
+                    className="comment-author-img"
                   />
                 </Link>
                 <div className="info">
@@ -111,17 +132,27 @@ const DetailArticle = () => {
                     {validDate(detailData.createdAt)}
                   </span>
                 </div>
-                <FollowBtn
-                  isFollowing={detailData.author.following}
-                  username={detailData.author.username}
-                />
-                &nbsp;&nbsp;
-                <Favourite
-                  favoitesCount={detailData.favoritesCount}
-                  favorited={detailData.favorited}
-                  slug={detailData.slug}
-                  title="Favorite Post"
-                />
+                {user.username === detailData.author.username ? (
+                  <>
+                    <EditArticleBtn slug={slug} />
+                    &nbsp;&nbsp;
+                    <DeleteArticleBtn slug={slug} />
+                  </>
+                ) : (
+                  <>
+                    <FollowBtn
+                      isFollowing={detailData.author.following}
+                      username={detailData.author.username}
+                    />
+                    &nbsp;&nbsp;
+                    <Favourite
+                      favoitesCount={detailData.favoritesCount}
+                      favorited={detailData.favorited}
+                      slug={detailData.slug}
+                      title="Favorite Post"
+                    />
+                  </>
+                )}
               </div>
             </div>
             <div className="row">

@@ -7,3 +7,5 @@ export const LOGIN = "log_in";
 export const LOGOUT = "log_out";
 
 export const LOGIN_SUCCESS = "log_in_successfull";
+
+export const UPDATE_USER = "update_user";

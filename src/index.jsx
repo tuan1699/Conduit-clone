@@ -18,11 +18,13 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import EditPage from "./pages/edit/EditPage";
 
 const routes = createRoutesFromElements(
   <Route element={<App />}>
     <Route index element={<Home />} />
     <Route path="/editor" element={<NewArticle />} />
+    <Route path="/editor/:slug" element={<EditPage />} />
     <Route path="/settings" element={<Setting />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />

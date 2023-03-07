@@ -6,17 +6,16 @@ import { useAuthContext } from "./store/contexts/authContext";
 import axios from "axios";
 
 const App = () => {
-  const { state } = useAuthContext();
-  const { user } = state;
+  const token = localStorage.getItem("token");
 
   axios.interceptors.request.use(
     function (config) {
-      if (user?.token) {
+      if (token) {
         config = {
           ...config,
           headers: {
             ...config.headers,
-            Authorization: "Token " + user?.token,
+            Authorization: "Token " + token,
           },
         };
       }

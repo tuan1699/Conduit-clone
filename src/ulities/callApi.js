@@ -1,6 +1,16 @@
 import axios from "axios";
 import { API_ROOT } from "./constant";
 
+export const fetchCurrentUser = async () => {
+  const res = await axios.get(`${API_ROOT}/user`);
+  return res.data;
+};
+
+export const updateCurrentUser = async (params) => {
+  const res = await axios.put(`${API_ROOT}/user`, params);
+  return res.data;
+};
+
 export const fetchArticle = async () => {
   const res = await axios.get(`${API_ROOT}/articles?limit=200&offset=0`);
   return res.data;
@@ -85,5 +95,20 @@ export const postComment = async (slug, params) => {
 
 export const deleteComment = async (slug, id) => {
   const res = await axios.delete(`${API_ROOT}/articles/${slug}/comments/${id}`);
+  return res.data;
+};
+
+export const createArticle = async (params) => {
+  const res = await axios.post(`${API_ROOT}/articles`, params);
+  return res.data;
+};
+
+export const deleteArticle = async (slug) => {
+  const res = await axios.delete(`${API_ROOT}/articles/${slug}`);
+  return res.data;
+};
+
+export const updateArticle = async (slug, params) => {
+  const res = await axios.put(`${API_ROOT}/articles/${slug}`, params);
   return res.data;
 };

@@ -1,7 +1,13 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { authReducer } from "../reducers/authReducer";
 import { initAuthState } from "../reducers/authReducer";
-import { loginAction, logoutAction, loginSuccessfull } from "../actions";
+import {
+  loginAction,
+  logoutAction,
+  loginSuccessfull,
+  updateUser,
+} from "../actions";
+import { Navigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -21,6 +27,12 @@ export const AuthProvider = ({ children }) => {
     dispatch(logoutAction());
   };
 
+  const handleUpdateUser = (userUpdated) => {
+    console.log("update user");
+    localStorage.setItem("user", JSON.stringify(userUpdated));
+    dispatch(updateUser(userUpdated));
+  };
+
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")) || null;
 
@@ -31,7 +43,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ state, handleSetDataLogin, handleSetLogout }}
+      value={{ state, handleSetDataLogin, handleSetLogout, handleUpdateUser }}
     >
       {children}
     </AuthContext.Provider>
