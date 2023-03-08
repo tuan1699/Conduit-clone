@@ -1,33 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   fetchComments,
   fetchDetail,
   postComment,
   deleteComment,
+  handleUnFollowUser,
+  handleFollowUser,
+  addFavorite,
+  unFavorite,
 } from "../../ulities/callApi";
-import { validDate } from "../../ulities/validDate";
-import FollowBtn from "../../components/FollowBtn";
-import Favourite from "../../components/Favourite";
+
 import InputComment from "./InputComment";
 import Comment from "./Comment";
 import { useAuthContext } from "../../store/contexts/authContext";
-import EditArticleBtn from "../../components/EditArticleBtn";
-import DeleteArticleBtn from "../../components/DeleteArticleBtn";
+import Feature from "./Feature";
 
 const DetailArticle = () => {
   const [detailData, setDetailData] = useState(null);
   const [comments, setComments] = useState(null);
   const location = useLocation();
   const slug = location.pathname.slice(9);
-
   const { state } = useAuthContext();
   const { user } = state;
+
+  const [follow, setFollow] = useState();
+  const [favourite, setFavourite] = useState();
+  const [countFavorite, setCountFavorite] = useState();
 
   useEffect(() => {
     fetchDetail(slug)
       .then((data) => {
         setDetailData(data.article);
+        setFollow(data.article.author.following);
+        setFavourite(data.article.favorited);
+        setCountFavorite(data.article.favoritesCount);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -40,28 +47,85 @@ const DetailArticle = () => {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleComment = (newComment) => {
-    postComment(slug, {
-      comment: {
-        body: newComment,
-      },
-    })
-      .then((data) => {
-        const newComments = [...comments, data.comment];
-        setComments(newComments);
-      })
-      .catch((err) => console.log(err));
+  const handleComment = useCallback(
+    (newComment) => {
+      if (newComment.trim() !== "") {
+        postComment(slug, {
+          comment: {
+            body: newComment,
+          },
+        })
+          .then((data) => {
+            const newComments = [...comments, data.comment];
+            setComments(newComments);
+          })
+          .catch((err) => console.log(err));
+      }
+    },
+    [comments]
+  );
+
+  const handleDeleteComment = useCallback(
+    (id) => {
+      deleteComment(slug, id)
+        .then(() => {
+          const indexComment = comments.findIndex(
+            (comment) => comment.id === id
+          );
+          const newComments = [...comments];
+          newComments.splice(indexComment, 1);
+          setComments(newComments);
+        })
+        .catch((err) => console.log(err));
+    },
+    [comments]
+  );
+
+  const handleFollow = () => {
+    if (follow) {
+      handleUnFollowUser(detailData.author.username)
+        .then(() => {
+          setFollow(!follow);
+        })
+        .catch((err) => {
+          console.log(err);
+          setFollow(follow);
+        });
+    } else {
+      handleFollowUser(detailData.author.username)
+        .then(() => {
+          setFollow(!follow);
+        })
+        .catch((err) => {
+          console.log(err);
+          setFollow(follow);
+        });
+    }
   };
 
-  const handleDeleteComment = (id) => {
-    deleteComment(slug, id)
-      .then(() => {
-        const indexComment = comments.findIndex((comment) => comment.id === id);
-        const newComments = [...comments];
-        newComments.splice(indexComment, 1);
-        setComments(newComments);
-      })
-      .catch((err) => console.log(err));
+  const handleFavorite = () => {
+    if (!favourite) {
+      addFavorite(slug)
+        .then(() => {
+          setFavourite(true);
+          setCountFavorite((prev) => prev + 1);
+        })
+        .catch((err) => {
+          console.log(err);
+          setFavourite(false);
+        });
+    } else {
+      unFavorite(slug)
+        .then(() => {
+          setFavourite(false);
+          setCountFavorite((prev) => prev - 1);
+        })
+        .catch((err) => {
+          console.log(err);
+          setFavourite(true);
+        });
+      setFavourite(!favourite);
+    }
   };
 
   return (
@@ -71,46 +135,18 @@ const DetailArticle = () => {
           <div className="banner">
             <div className="container">
               <h1>{detailData.title}</h1>
-              <div className="article-meta">
-                <Link to={`/${detailData.author.username}`}>
-                  <img
-                    src={detailData.author.image}
-                    alt={detailData.author.username}
-                  />
-                </Link>
-                <div className="info">
-                  <Link
-                    className="author"
-                    to={`/${detailData.author.username}`}
-                  >
-                    {detailData.author.username}
-                  </Link>
-                  <span className="date">
-                    {validDate(detailData.createdAt)}
-                  </span>
-                </div>
-                {user && user?.username === detailData.author.username ? (
-                  <>
-                    <EditArticleBtn slug={slug} />
-                    &nbsp;&nbsp;
-                    <DeleteArticleBtn slug={slug} />
-                  </>
-                ) : (
-                  <>
-                    <FollowBtn
-                      isFollowing={detailData.author.following}
-                      username={detailData.author.username}
-                    />
-                    &nbsp;&nbsp;
-                    <Favourite
-                      favoitesCount={detailData.favoritesCount}
-                      favorited={detailData.favorited}
-                      slug={detailData.slug}
-                      title="Favorite Post"
-                    />
-                  </>
-                )}
-              </div>
+              <Feature
+                author={detailData.author}
+                createdAt={detailData.createdAt}
+                slug={slug}
+                user={user}
+                favoritesCount={detailData.favoritesCount}
+                follow={follow}
+                favourite={favourite}
+                countFavorite={countFavorite}
+                handleFollow={handleFollow}
+                handleFavorite={handleFavorite}
+              />
             </div>
           </div>
           <div className="container page">
@@ -121,47 +157,18 @@ const DetailArticle = () => {
             </div>
             <hr />
             <div className="article-actions">
-              <div className="article-meta">
-                <Link to={`/${detailData.author.username}`}>
-                  <img
-                    src={detailData.author.image}
-                    alt={detailData.author.username}
-                    className="comment-author-img"
-                  />
-                </Link>
-                <div className="info">
-                  <Link
-                    className="author"
-                    to={`/${detailData.author.username}`}
-                  >
-                    {detailData.author.username}
-                  </Link>
-                  <span className="date">
-                    {validDate(detailData.createdAt)}
-                  </span>
-                </div>
-                {user && user?.username === detailData.author.username ? (
-                  <>
-                    <EditArticleBtn slug={slug} />
-                    &nbsp;&nbsp;
-                    <DeleteArticleBtn slug={slug} />
-                  </>
-                ) : (
-                  <>
-                    <FollowBtn
-                      isFollowing={detailData.author.following}
-                      username={detailData.author.username}
-                    />
-                    &nbsp;&nbsp;
-                    <Favourite
-                      favoitesCount={detailData.favoritesCount}
-                      favorited={detailData.favorited}
-                      slug={detailData.slug}
-                      title="Favorite Post"
-                    />
-                  </>
-                )}
-              </div>
+              <Feature
+                author={detailData.author}
+                createdAt={detailData.createdAt}
+                slug={slug}
+                user={user}
+                favoritesCount={detailData.favoritesCount}
+                follow={follow}
+                favourite={favourite}
+                countFavorite={countFavorite}
+                handleFollow={handleFollow}
+                handleFavorite={handleFavorite}
+              />
             </div>
             <div className="row">
               <div className="col-xs-12 col-md-8 offset-md-2">
@@ -183,6 +190,7 @@ const DetailArticle = () => {
                 {comments &&
                   comments.map((comment, index) => (
                     <Comment
+                      author={detailData.author.username}
                       comment={comment}
                       key={index}
                       handleDeleteComment={handleDeleteComment}

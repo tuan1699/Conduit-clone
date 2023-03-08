@@ -6,7 +6,6 @@ import NewArticle from "./pages/article/NewArticle";
 import Setting from "./pages/setting/Setting";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
-import Profile from "./pages/profile/Profile";
 import DetailArticle from "./pages/article/DetailArticle";
 import ProfileOther from "./pages/profile/ProfileOther";
 
@@ -28,7 +27,6 @@ const routes = createRoutesFromElements(
     <Route path="/settings" element={<Setting />} />
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-    <Route path="/profile" element={<Profile />} />
     <Route path="/article/:slug" element={<DetailArticle />} />
     <Route path="/:profile" element={<ProfileOther />} />
   </Route>

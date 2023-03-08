@@ -2,42 +2,24 @@ import React, { useEffect, useState } from "react";
 import { addFavorite, unFavorite } from "../ulities/callApi";
 import { useNavigate } from "react-router-dom";
 
-const Favourite = ({ favoitesCount, favorited, slug, title, right }) => {
-  const [isFavorite, setIsFavorite] = useState(null);
-  const [countFavorite, setCountFavorite] = useState(null);
+const Favourite = ({
+  favoitesCount,
+  isFavorite,
+  slug,
+  title,
+  right,
+  handleFavorite,
+}) => {
+  // const [isFavorite, setIsFavorite] = useState(null);
+  // const [countFavorite, setCountFavorite] = useState(null);
 
-  useEffect(() => {
-    setIsFavorite(favorited);
-    setCountFavorite(favoitesCount);
-  }, [favoitesCount, favorited]);
+  // useEffect(() => {
+  //   setIsFavorite(favorited);
+  //   setCountFavorite(favoitesCount);
+  // }, [favoitesCount, favorited]);
 
   const user = localStorage.getItem("token");
   const navigate = useNavigate();
-
-  const handleFavorite = () => {
-    if (!isFavorite) {
-      addFavorite(slug)
-        .then(() => {
-          setIsFavorite(true);
-          setCountFavorite((prev) => prev + 1);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsFavorite(false);
-        });
-    } else {
-      unFavorite(slug)
-        .then(() => {
-          setIsFavorite(false);
-          setCountFavorite((prev) => prev - 1);
-        })
-        .catch((err) => {
-          console.log(err);
-          setIsFavorite(true);
-        });
-      setIsFavorite(!isFavorite);
-    }
-  };
 
   return (
     <button
@@ -54,7 +36,7 @@ const Favourite = ({ favoitesCount, favorited, slug, title, right }) => {
         }
       }}
     >
-      <i className="ion-heart" /> ({countFavorite})
+      <i className="ion-heart" /> ({favoitesCount})
     </button>
   );
 };

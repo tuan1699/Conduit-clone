@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 
-const InputComment = ({ imageUser, username, handleComment }) => {
+const InputComment = memo(({ imageUser, username, handleComment }) => {
   const [inputComment, setInputComment] = useState("");
 
   const handleInputComment = (e) => {
@@ -27,10 +27,12 @@ const InputComment = ({ imageUser, username, handleComment }) => {
 
       <div className="card-footer ">
         <img src={imageUser} alt={username} className="comment-author-img" />
-        <button className="btn btn-sm btn-primary">Post Comment</button>
+        <button className="btn btn-sm btn-primary" type="submit">
+          Post Comment
+        </button>
       </div>
     </form>
   );
-};
+});
 
 export default InputComment;

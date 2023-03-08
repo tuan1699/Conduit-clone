@@ -16,6 +16,7 @@ const Setting = () => {
   const [bio, setBio] = useState(currentUser?.bio);
   const [email, setEmail] = useState(currentUser?.email);
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState(null);
 
   const handleUpdateSetting = (e) => {
     e.preventDefault();
@@ -49,10 +50,22 @@ const Setting = () => {
             <form>
               <fieldset>
                 <InputImage imageURL={imageURL} setImageURL={setImageURL} />
-                <InputUserName username={username} setUserName={setUserName} />
+                <InputUserName
+                  username={username}
+                  setUserName={setUserName}
+                  setErrors={setErrors}
+                />
                 <InputBio bio={bio} setBio={setBio} />
-                <InputEmail email={email} setEmail={setEmail} />
-                <InputPassword password={password} setPassword={setPassword} />
+                <InputEmail
+                  email={email}
+                  setEmail={setEmail}
+                  setErrors={setErrors}
+                />
+                <InputPassword
+                  password={password}
+                  setPassword={setPassword}
+                  setErrors={setErrors}
+                />
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   onClick={handleUpdateSetting}

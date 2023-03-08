@@ -1,8 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { validDate } from "../../ulities/validDate";
 
-const Comment = ({ comment, handleDeleteComment }) => {
+const Comment = memo(({ comment, handleDeleteComment, author }) => {
   return (
     <div className="card">
       <div className="card-block">
@@ -17,7 +17,9 @@ const Comment = ({ comment, handleDeleteComment }) => {
           />
         </Link>
         &nbsp;
-        <Link className="comment-author">{comment.author.username}</Link>
+        <Link className="comment-author" to={`/${comment.author.username}`}>
+          {comment.author.username}
+        </Link>
         <span className="date-posted">{validDate(comment.createdAt)}</span>
         <span className="mod-options">
           <i className="ion-edit" />
@@ -29,6 +31,6 @@ const Comment = ({ comment, handleDeleteComment }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Comment;
