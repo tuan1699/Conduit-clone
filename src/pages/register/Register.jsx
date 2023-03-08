@@ -1,7 +1,57 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import InputEmail from "../../components/InputEmail";
+import InputPassword from "../../components/InputPassword";
+import InputUserName from "../../components/InputUserName";
+import { useAuthContext } from "../../store/contexts/authContext";
+import { register } from "../../ulities/callApi";
 
 const Register = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
+  const [errors, setErrors] = useState(null);
+  const navigate = useNavigate();
+
+  const { handleSetDataLogin } = useAuthContext();
+
+  const handleRegister = (e) => {
+    e.preventDefault();
+    if (userName.trim() === "") {
+      setErrors("username can't be blank");
+    }
+    if (email.trim() === "") {
+      setErrors("email can't be blank");
+    }
+    if (password.trim() === "") {
+      setErrors("password can't be blank");
+    }
+    const userRegister = {
+      username: userName,
+      email: email,
+      password: password,
+    };
+    register({
+      user: userRegister,
+    })
+      .then((data) => {
+        console.log(data.user);
+        handleSetDataLogin(data.user);
+        setErrors(null);
+        setEmail("");
+        setPassword("");
+        setUserName("");
+        navigate(`/`);
+      })
+      .catch((err) => {
+        setErrors(
+          Object.keys(err.response.data.errors) +
+            " " +
+            Object.values(err.response.data.errors)
+        );
+      });
+  };
+
   return (
     <div className="auth-page">
       <div className="container page">
@@ -11,32 +61,28 @@ const Register = () => {
             <p className="text-xs-center">
               <Link to="/login">Have an account?</Link>
             </p>
-            {/* <ul className="error-messages">
-              <li>That email is already taken</li>
-            </ul> */}
+            <ul className="error-messages">{errors && <li>{errors}</li>}</ul>
+
             <form>
-              <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="User Name"
-                />
-              </fieldset>
-              <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="text"
-                  placeholder="Email"
-                />
-              </fieldset>
-              <fieldset className="form-group">
-                <input
-                  className="form-control form-control-lg"
-                  type="password"
-                  placeholder="Password"
-                />
-              </fieldset>
-              <button className="btn btn-lg btn-primary pull-xs-right">
+              <InputUserName
+                userName={userName}
+                setUserName={setUserName}
+                setErrors={setErrors}
+              />
+              <InputEmail
+                email={email}
+                setEmail={setEmail}
+                setErrors={setErrors}
+              />
+              <InputPassword
+                password={password}
+                setPassword={setPassword}
+                setErrors={setErrors}
+              />
+              <button
+                className="btn btn-lg btn-primary pull-xs-right"
+                onClick={handleRegister}
+              >
                 Sign up
               </button>
             </form>

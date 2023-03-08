@@ -11,8 +11,8 @@ const Home = () => {
             <p>A place to share your knowledge.</p>
           </div>
         </div>
+        <Content />
       </div>
-      <Content />
     </>
   );
 };

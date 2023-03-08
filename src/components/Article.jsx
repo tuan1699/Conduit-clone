@@ -20,6 +20,7 @@ const Article = ({ article }) => {
           favoitesCount={article.favoritesCount}
           favorited={article.favorited}
           slug={article.slug}
+          title={article.title}
           right="pull-xs-right"
         />
       </div>
@@ -27,6 +28,16 @@ const Article = ({ article }) => {
         <h1>{article.title}</h1>
         <p>{article.description}</p>
         <span>Read more...</span>
+        <ul className="tag-list">
+          {article.tagList.map((tag, index) => (
+            <li
+              key={index}
+              className="tag-default tag-pill tag-outline ng-binding ng-scope"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
       </Link>
     </div>
   );

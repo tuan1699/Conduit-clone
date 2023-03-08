@@ -15,14 +15,15 @@ const ProfileOther = () => {
   const [articles, setArticles] = useState(null);
   const [currentTab, setCurrentTab] = useState("my-article");
 
+  const { state } = useAuthContext();
+  const { user } = state;
+
   useEffect(() => {
     if (currentTab === "my-article") {
       getProfileAuthor(profile)
         .then((data) => {
           setAuthor(data.profile);
-          console.log(data.profile);
           const userAPI = data.profile.username.replaceAll(" ", "+");
-          console.log(userAPI);
           fetchArticleByUser({
             author: userAPI,
           })
@@ -38,12 +39,12 @@ const ProfileOther = () => {
           setAuthor(data.profile);
           console.log(data.profile);
           const userAPI = data.profile.username.replaceAll(" ", "+");
-          console.log(userAPI);
           fetchFavArticleByUser({
             author: userAPI,
           })
             .then((data) => {
               setArticles(data.articles);
+              console.log(data.articles);
             })
             .catch((err) => console.log(err));
         })
@@ -62,10 +63,20 @@ const ProfileOther = () => {
                   <img src={author.image} className="user-img" />
                   <h4>{author.username}</h4>
                   <p>{author.bio}</p>
-                  <FollowBtn
-                    isFollowing={author.following}
-                    username={author.username}
-                  />
+                  {user && user?.username === author.username ? (
+                    <Link
+                      to="/settings"
+                      className="btn btn-sm btn-outline-secondary action-btn"
+                    >
+                      <i className="ion-plus-round" />
+                      &nbsp; Edit Profile Settings
+                    </Link>
+                  ) : (
+                    <FollowBtn
+                      isFollowing={author.following}
+                      username={author.username}
+                    />
+                  )}
                 </div>
               </div>
             </div>

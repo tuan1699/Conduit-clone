@@ -1,9 +1,9 @@
 import React from "react";
 
-const Tag = ({ tag }) => {
+const Tag = ({ tag, handleDeleteTag, position }) => {
   return (
     <span className="tag-default tag-pill ng-binding ng-scope">
-      <i className="ion-close-round" />
+      <i className="ion-close-round" onClick={() => handleDeleteTag(tag)} />
       {tag}
     </span>
   );

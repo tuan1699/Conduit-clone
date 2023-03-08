@@ -6,6 +6,7 @@ import InputContent from "../article/InputContent";
 import InputTag from "../article/InputTag";
 import InputTitle from "../article/InputTitle";
 import Tag from "../article/Tag";
+import { isEqual } from "lodash";
 
 const EditPage = () => {
   const [dataArticle, setDataArticle] = useState({});
@@ -51,6 +52,13 @@ const EditPage = () => {
     [content]
   );
 
+  const handleDeleteTag = (tag) => {
+    const newTags = [...tags];
+    const index = newTags.findIndex((tagItem) => tagItem === tag);
+    newTags.splice(index, 1);
+    setTags(newTags);
+  };
+
   const handleAddTag = useCallback(
     (e) => {
       e.stopPropagation();
@@ -64,6 +72,9 @@ const EditPage = () => {
 
   const handleUpdateArticle = (e) => {
     e.preventDefault();
+
+    const isSameTags = isEqual(tags, dataArticle.tagList);
+
     if (title.trim() === "") {
       setTitle(dataArticle.title);
     } else if (about.trim() === "") {
@@ -73,12 +84,14 @@ const EditPage = () => {
     } else if (
       title !== dataArticle.title ||
       about !== dataArticle.description ||
-      content !== dataArticle.body
+      content !== dataArticle.body ||
+      !isSameTags
     ) {
       const newArticle = {
         title: title,
         description: about,
         body: content,
+        tagList: tags,
       };
       console.log("enable update");
       console.log(newArticle);
@@ -129,7 +142,13 @@ const EditPage = () => {
                   <div className="tag-list">
                     {tags &&
                       tags.length !== 0 &&
-                      tags.map((tag, index) => <Tag tag={tag} key={index} />)}
+                      tags.map((tag, index) => (
+                        <Tag
+                          tag={tag}
+                          key={index}
+                          handleDeleteTag={handleDeleteTag}
+                        />
+                      ))}
                   </div>
                 </fieldset>
                 <button

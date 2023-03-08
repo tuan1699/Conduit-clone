@@ -3,11 +3,10 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../../store/contexts/authContext";
 import { updateCurrentUser } from "../../ulities/callApi";
 import InputBio from "./InputBio";
-import InputEmail from "./InputEmail";
+import InputEmail from "../../components/InputEmail";
+import InputPassword from "../../components/InputPassword";
 import InputImage from "./InputImage";
-import InputNewPassword from "./InputNewPassword";
-import InputUserName from "./InputUserName";
-
+import InputUserName from "../../components/InputUserName";
 const Setting = () => {
   const { handleSetLogout, handleUpdateUser } = useAuthContext();
   const currentUser = JSON.parse(localStorage.getItem("user")) || null;
@@ -16,7 +15,7 @@ const Setting = () => {
   const [username, setUserName] = useState(currentUser?.username);
   const [bio, setBio] = useState(currentUser?.bio);
   const [email, setEmail] = useState(currentUser?.email);
-  const [newPassword, setNewPassword] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleUpdateSetting = (e) => {
     e.preventDefault();
@@ -25,7 +24,7 @@ const Setting = () => {
     } else {
       const userUpdated = {
         email: email,
-        password: newPassword,
+        password: password,
         username: username,
         bio: bio,
         image: imageURL,
@@ -53,10 +52,7 @@ const Setting = () => {
                 <InputUserName username={username} setUserName={setUserName} />
                 <InputBio bio={bio} setBio={setBio} />
                 <InputEmail email={email} setEmail={setEmail} />
-                <InputNewPassword
-                  newPassword={newPassword}
-                  setNewPassword={setNewPassword}
-                />
+                <InputPassword password={password} setPassword={setPassword} />
                 <button
                   className="btn btn-lg btn-primary pull-xs-right"
                   onClick={handleUpdateSetting}
@@ -68,7 +64,11 @@ const Setting = () => {
             <hr />
             <button
               className="btn btn-outline-danger"
-              onClick={handleSetLogout}
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                handleSetLogout();
+              }}
             >
               Or click here to logout.
             </button>

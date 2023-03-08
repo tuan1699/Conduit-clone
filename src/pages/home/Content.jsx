@@ -18,7 +18,7 @@ const Content = () => {
   const [tags, setTags] = useState(null);
   const [selectedTag, setSelectedTag] = useState("");
   const { state } = useAuthContext();
-  const { isAuthenticated } = state;
+  const { isAuthenticated, user } = state;
   const [currentTab, setCurrentTab] = useState("global-feed");
 
   const handleSelectTag = (tagActive) => {
@@ -36,6 +36,7 @@ const Content = () => {
         .then((data) => {
           const dataSize = data.articles.length;
           const totalPage = Math.ceil(dataSize / PAGE_SIZE);
+          console.log(totalPage);
           const articlesInPage = data.articles.slice(
             currentPage * PAGE_SIZE,
             (currentPage + 1) * PAGE_SIZE
@@ -73,7 +74,7 @@ const Content = () => {
         setTotalPage(totalPage);
       });
     }
-  }, [currentPage, currentTab, isAuthenticated, selectedTag]);
+  }, [currentPage, currentTab, isAuthenticated, selectedTag, user]);
 
   useEffect(() => {
     fetchTags()
@@ -152,23 +153,24 @@ const Content = () => {
             </div>
           )}
           <ul className="pagination">
-            {totalPage &&
-              new Array(totalPage).fill(null).map((num, index) => (
-                <li
-                  className={
-                    currentPage === index
-                      ? "page-item ng-scope active"
-                      : "page-item ng-scope"
-                  }
-                  style={{
-                    cursor: "pointer",
-                  }}
-                  key={index}
-                  onClick={() => setCurrentPage(index)}
-                >
-                  <div className="page-link ng-binding">{index + 1}</div>
-                </li>
-              ))}
+            {totalPage && totalPage !== 0
+              ? new Array(totalPage).fill(null).map((num, index) => (
+                  <li
+                    className={
+                      currentPage === index
+                        ? "page-item ng-scope active"
+                        : "page-item ng-scope"
+                    }
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    key={index}
+                    onClick={() => setCurrentPage(index)}
+                  >
+                    <div className="page-link ng-binding">{index + 1}</div>
+                  </li>
+                ))
+              : ""}
           </ul>
         </div>
         <div className="col-md-3">

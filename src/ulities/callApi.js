@@ -21,11 +21,17 @@ export const login = async (userLogin) => {
   return res.data;
 };
 
+export const register = async (userRegister) => {
+  const res = await axios.post(`${API_ROOT}/users`, userRegister);
+  return res.data;
+};
+
 export const fetchDetail = async (slug) => {
   const res = await axios.get(`${API_ROOT}/articles/${slug}`);
   return res.data;
 };
 
+//
 export const fetchFeed = async (options) => {
   const res = await axios.get(
     `${API_ROOT}/articles/feed?limit=${options.limit}&offset=${options.offset}`

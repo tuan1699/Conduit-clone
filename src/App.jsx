@@ -2,14 +2,13 @@ import React, { useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
-import { useAuthContext } from "./store/contexts/authContext";
 import axios from "axios";
+import { useAuthContext } from "./store/contexts/authContext";
 
 const App = () => {
-  const token = localStorage.getItem("token");
-
   axios.interceptors.request.use(
     function (config) {
+      const token = localStorage.getItem("token") || null;
       if (token) {
         config = {
           ...config,

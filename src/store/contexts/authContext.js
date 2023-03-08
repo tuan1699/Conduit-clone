@@ -7,7 +7,6 @@ import {
   loginSuccessfull,
   updateUser,
 } from "../actions";
-import { Navigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -15,15 +14,11 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initAuthState);
 
   const handleSetDataLogin = (userData) => {
-    localStorage.setItem("token", userData.token);
-    localStorage.setItem("user", JSON.stringify(userData));
     dispatch(loginAction(userData));
   };
 
   const handleSetLogout = () => {
     console.log("log out");
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     dispatch(logoutAction());
   };
 

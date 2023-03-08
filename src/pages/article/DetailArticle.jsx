@@ -72,21 +72,24 @@ const DetailArticle = () => {
             <div className="container">
               <h1>{detailData.title}</h1>
               <div className="article-meta">
-                <Link >
+                <Link to={`/${detailData.author.username}`}>
                   <img
                     src={detailData.author.image}
                     alt={detailData.author.username}
                   />
                 </Link>
                 <div className="info">
-                  <Link  className="author">
+                  <Link
+                    className="author"
+                    to={`/${detailData.author.username}`}
+                  >
                     {detailData.author.username}
                   </Link>
                   <span className="date">
                     {validDate(detailData.createdAt)}
                   </span>
                 </div>
-                {user.username === detailData.author.username ? (
+                {user && user?.username === detailData.author.username ? (
                   <>
                     <EditArticleBtn slug={slug} />
                     &nbsp;&nbsp;
@@ -119,7 +122,7 @@ const DetailArticle = () => {
             <hr />
             <div className="article-actions">
               <div className="article-meta">
-                <Link>
+                <Link to={`/${detailData.author.username}`}>
                   <img
                     src={detailData.author.image}
                     alt={detailData.author.username}
@@ -127,12 +130,17 @@ const DetailArticle = () => {
                   />
                 </Link>
                 <div className="info">
-                  <Link className="author">{detailData.author.username}</Link>
+                  <Link
+                    className="author"
+                    to={`/${detailData.author.username}`}
+                  >
+                    {detailData.author.username}
+                  </Link>
                   <span className="date">
                     {validDate(detailData.createdAt)}
                   </span>
                 </div>
-                {user.username === detailData.author.username ? (
+                {user && user?.username === detailData.author.username ? (
                   <>
                     <EditArticleBtn slug={slug} />
                     &nbsp;&nbsp;
@@ -157,11 +165,19 @@ const DetailArticle = () => {
             </div>
             <div className="row">
               <div className="col-xs-12 col-md-8 offset-md-2">
-                <InputComment
-                  imageUser={detailData.author.image}
-                  username={detailData.author.username}
-                  handleComment={handleComment}
-                />
+                {user ? (
+                  <InputComment
+                    imageUser={detailData.author.image}
+                    username={detailData.author.username}
+                    handleComment={handleComment}
+                  />
+                ) : (
+                  <p>
+                    <Link to="/login">Sign in</Link> or{" "}
+                    <Link to="/register">Sign up</Link> to add comments on this
+                    article.
+                  </p>
+                )}
 
                 {/* Comment Component */}
                 {comments &&

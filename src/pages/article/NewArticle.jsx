@@ -37,16 +37,28 @@ const NewArticle = () => {
     [content]
   );
 
-  const handleAddTag = (e) => {
-    e.stopPropagation();
-    if (e.key === "Enter") {
-      if (tags && tags.slice(-1).toString() !== inputTag && inputTag !== "")
-        setTags([...tags, inputTag]);
-    }
+  const handleDeleteTag = (tag) => {
+    const newTags = [...tags];
+    const index = newTags.findIndex((tagItem) => tagItem === tag);
+    newTags.splice(index, 1);
+    setTags(newTags);
   };
+
+  const handleAddTag = useCallback(
+    (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (tags && tags.slice(-1).toString() !== inputTag && inputTag !== "")
+          setTags([...tags, inputTag]);
+        setInputTag("");
+      }
+    },
+    [inputTag, tags]
+  );
 
   const handleSubmitArticle = (e) => {
     e.preventDefault();
+    console.log("submit");
     if (title.trim() === "") {
       setErrors("title can't be blank");
     } else if (about.trim() === "") {
@@ -65,7 +77,6 @@ const NewArticle = () => {
       })
         .then((data) => {
           const slug = data.article.slug;
-          console.log(slug);
           navigate(`/article/${slug}`);
           setTitle("");
           setAbout("");
@@ -107,7 +118,14 @@ const NewArticle = () => {
                   <div className="tag-list">
                     {tags &&
                       tags.length !== 0 &&
-                      tags.map((tag, index) => <Tag tag={tag} key={index} />)}
+                      tags.map((tag, index) => (
+                        <Tag
+                          tag={tag}
+                          key={index}
+                          position={index}
+                          handleDeleteTag={handleDeleteTag}
+                        />
+                      ))}
                   </div>
                 </fieldset>
                 <button

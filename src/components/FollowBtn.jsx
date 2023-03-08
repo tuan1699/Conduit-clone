@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { handleFollowUser, handleUnFollowUser } from "../ulities/callApi";
 
 const FollowBtn = ({ isFollowing, username }) => {
   const [follow, setFollow] = useState(isFollowing);
+  const user = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const handleFollow = () => {
     if (follow) {
@@ -29,7 +32,13 @@ const FollowBtn = ({ isFollowing, username }) => {
   return (
     <button
       className="btn btn-sm btn-outline-secondary action-btn"
-      onClick={handleFollow}
+      onClick={() => {
+        if (user) {
+          handleFollow();
+        } else {
+          navigate("/login");
+        }
+      }}
     >
       <i className="ion-plus-round" />
       &nbsp; {follow ? "Unfollowing" : "Following"} {username}

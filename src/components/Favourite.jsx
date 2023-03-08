@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { addFavorite, unFavorite } from "../ulities/callApi";
+import { useNavigate } from "react-router-dom";
 
 const Favourite = ({ favoitesCount, favorited, slug, title, right }) => {
-  const [isFavorite, setIsFavorite] = useState(favorited);
-  const [countFavorite, setCountFavorite] = useState(favoitesCount);
+  const [isFavorite, setIsFavorite] = useState(null);
+  const [countFavorite, setCountFavorite] = useState(null);
+
+  useEffect(() => {
+    setIsFavorite(favorited);
+    setCountFavorite(favoitesCount);
+  }, [favoitesCount, favorited]);
+
+  const user = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   const handleFavorite = () => {
     if (!isFavorite) {
@@ -34,12 +43,18 @@ const Favourite = ({ favoitesCount, favorited, slug, title, right }) => {
     <button
       className={
         isFavorite
-          ? `btn btn-sm btn-primary btn-sm ${right}`
+          ? `btn btn-primary btn-sm ${right}`
           : `btn btn-outline-primary btn-sm ${right}`
       }
-      onClick={handleFavorite}
+      onClick={() => {
+        if (user) {
+          handleFavorite();
+        } else {
+          navigate("/login");
+        }
+      }}
     >
-      <i className="ion-heart" /> {title} ({countFavorite})
+      <i className="ion-heart" /> ({countFavorite})
     </button>
   );
 };

@@ -1,11 +1,11 @@
 import React from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useParams } from "react-router-dom";
 import { useAuthContext } from "../store/contexts/authContext";
 
 const Header = () => {
   const location = useLocation();
   const currentRoute = location.pathname;
-
+  const { profile } = useParams();
   const { state } = useAuthContext();
   const { isAuthenticated, user } = state;
 
@@ -24,20 +24,20 @@ const Header = () => {
               Home
             </Link>
           </li>
-          <li className="nav-item">
-            <Link
-              className={
-                currentRoute === "/editor" ? "nav-link active" : "nav-link"
-              }
-              to="/editor"
-            >
-              <i className="ion-compose" />
-              &nbsp;New Article
-            </Link>
-          </li>
 
           {isAuthenticated && user ? (
             <>
+              <li className="nav-item">
+                <Link
+                  className={
+                    currentRoute === "/editor" ? "nav-link active" : "nav-link"
+                  }
+                  to="/editor"
+                >
+                  <i className="ion-compose" />
+                  &nbsp;New Article
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link
                   className={
@@ -54,9 +54,9 @@ const Header = () => {
               <li className="nav-item">
                 <Link
                   className={
-                    currentRoute === "/profile" ? "nav-link active" : "nav-link"
+                    profile === user.username ? "nav-link active" : "nav-link"
                   }
-                  to="/profile"
+                  to={user.username}
                 >
                   <img src={user?.image} alt="" className="user-pic" />
                   {user.username}

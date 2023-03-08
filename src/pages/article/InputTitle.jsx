@@ -8,6 +8,7 @@ const InputTitle = memo(function InputTitle({ title, handleInputTitle }) {
         className="form-control form-control-lg"
         placeholder="Article Title"
         value={title}
+        autoFocus
         onChange={(e) => {
           handleInputTitle(e);
         }}
