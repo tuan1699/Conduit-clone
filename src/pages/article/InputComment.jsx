@@ -2,11 +2,9 @@ import React, { memo, useState } from "react";
 
 const InputComment = memo(({ imageUser, username, handleComment }) => {
   const [inputComment, setInputComment] = useState("");
-
   const handleInputComment = (e) => {
     setInputComment(e.target.value);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     handleComment(inputComment);
@@ -24,7 +22,6 @@ const InputComment = memo(({ imageUser, username, handleComment }) => {
           rows={3}
         />
       </div>
-
       <div className="card-footer ">
         <img src={imageUser} alt={username} className="comment-author-img" />
         <button className="btn btn-sm btn-primary" type="submit">

@@ -2,7 +2,7 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import DeleteArticleBtn from "../../components/DeleteArticleBtn";
 import EditArticleBtn from "../../components/EditArticleBtn";
-import Favourite from "../../components/Favourite";
+import FavouriteDetailBtn from "../../components/FavouriteDetailBtn";
 import FollowBtn from "../../components/FollowBtn";
 import { validDate } from "../../ulities/validDate";
 
@@ -43,7 +43,7 @@ const Feature = memo(
               handleFollow={handleFollow}
             />
             &nbsp;&nbsp;
-            <Favourite
+            <FavouriteDetailBtn
               favoitesCount={countFavorite}
               isFavorite={favourite}
               handleFavorite={handleFavorite}

@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { addFavorite, unFavorite } from "../ulities/callApi";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const Favourite = ({
+const FavouriteDetailBtn = ({
   favoitesCount,
   isFavorite,
-  slug,
-  title,
   right,
   handleFavorite,
 }) => {
-  // const [isFavorite, setIsFavorite] = useState(null);
-  // const [countFavorite, setCountFavorite] = useState(null);
-
-  // useEffect(() => {
-  //   setIsFavorite(favorited);
-  //   setCountFavorite(favoitesCount);
-  // }, [favoitesCount, favorited]);
-
   const user = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -36,9 +25,9 @@ const Favourite = ({
         }
       }}
     >
-      <i className="ion-heart" /> ({favoitesCount})
+      <i className="ion-heart" /> Favourite Article ({favoitesCount})
     </button>
   );
 };
 
-export default Favourite;
+export default FavouriteDetailBtn;

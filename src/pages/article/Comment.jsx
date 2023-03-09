@@ -22,10 +22,16 @@ const Comment = memo(({ comment, handleDeleteComment, author }) => {
         </Link>
         <span className="date-posted">{validDate(comment.createdAt)}</span>
         <span className="mod-options">
-          <i className="ion-edit" />
           <i
             className="ion-trash-a"
-            onClick={() => handleDeleteComment(comment.id)}
+            onClick={() => {
+              const isDelete = window.confirm(
+                "Are you sure delete this comment"
+              );
+              if (isDelete) {
+                handleDeleteComment(comment.id);
+              }
+            }}
           />
         </span>
       </div>

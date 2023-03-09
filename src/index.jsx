@@ -7,8 +7,7 @@ import Setting from "./pages/setting/Setting";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import DetailArticle from "./pages/article/DetailArticle";
-import ProfileOther from "./pages/profile/ProfileOther";
-
+import Profile from "./pages/profile/Profile";
 import { AuthProvider } from "./store/contexts/authContext";
 
 import {
@@ -28,7 +27,7 @@ const routes = createRoutesFromElements(
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/article/:slug" element={<DetailArticle />} />
-    <Route path="/:profile" element={<ProfileOther />} />
+    <Route path="/:profile" element={<Profile />} />
   </Route>
 );
 

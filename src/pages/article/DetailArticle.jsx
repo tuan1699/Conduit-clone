@@ -10,7 +10,6 @@ import {
   addFavorite,
   unFavorite,
 } from "../../ulities/callApi";
-
 import InputComment from "./InputComment";
 import Comment from "./Comment";
 import { useAuthContext } from "../../store/contexts/authContext";
@@ -23,7 +22,6 @@ const DetailArticle = () => {
   const slug = location.pathname.slice(9);
   const { state } = useAuthContext();
   const { user } = state;
-
   const [follow, setFollow] = useState();
   const [favourite, setFavourite] = useState();
   const [countFavorite, setCountFavorite] = useState();
@@ -80,8 +78,7 @@ const DetailArticle = () => {
     },
     [comments]
   );
-
-  const handleFollow = () => {
+  const handleFollow = useCallback(() => {
     if (follow) {
       handleUnFollowUser(detailData.author.username)
         .then(() => {
@@ -101,9 +98,8 @@ const DetailArticle = () => {
           setFollow(follow);
         });
     }
-  };
-
-  const handleFavorite = () => {
+  }, [follow]);
+  const handleFavorite = useCallback(() => {
     if (!favourite) {
       addFavorite(slug)
         .then(() => {
@@ -126,7 +122,7 @@ const DetailArticle = () => {
         });
       setFavourite(!favourite);
     }
-  };
+  }, [countFavorite, favourite]);
 
   return (
     <>

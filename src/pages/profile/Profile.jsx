@@ -9,12 +9,11 @@ import {
   fetchFavArticleByUser,
 } from "../../ulities/callApi";
 
-const ProfileOther = () => {
+const Profile = () => {
   const { profile } = useParams();
   const [author, setAuthor] = useState(null);
   const [articles, setArticles] = useState(null);
   const [currentTab, setCurrentTab] = useState("my-article");
-
   const { state } = useAuthContext();
   const { user } = state;
 
@@ -37,14 +36,12 @@ const ProfileOther = () => {
       getProfileAuthor(profile)
         .then((data) => {
           setAuthor(data.profile);
-          console.log(data.profile);
           const userAPI = data.profile.username.replaceAll(" ", "+");
           fetchFavArticleByUser({
             author: userAPI,
           })
             .then((data) => {
               setArticles(data.articles);
-              console.log(data.articles);
             })
             .catch((err) => console.log(err));
         })
@@ -141,4 +138,4 @@ const ProfileOther = () => {
   );
 };
 
-export default ProfileOther;
+export default Profile;

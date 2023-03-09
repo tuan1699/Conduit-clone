@@ -3,7 +3,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Outlet } from "react-router-dom";
 import axios from "axios";
-import { useAuthContext } from "./store/contexts/authContext";
 
 const App = () => {
   axios.interceptors.request.use(

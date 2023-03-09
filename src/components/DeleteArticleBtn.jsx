@@ -15,7 +15,11 @@ const DeleteArticleBtn = ({ slug }) => {
   return (
     <button
       className="btn btn-outline-danger btn-sm"
-      onClick={handleDeleteArticle}
+      onClick={() => {
+        if (window.confirm("Are you sure delete this article")) {
+          handleDeleteArticle();
+        }
+      }}
     >
       <i className="ion-trash-a" /> Delete Article
     </button>

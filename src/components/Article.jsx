@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { validDate } from "../ulities/validDate";
-import Favourite from "./Favourite";
+import FavouriteBtn from "./FavouriteBtn";
 
 const Article = ({ article }) => {
   return (
@@ -16,7 +16,7 @@ const Article = ({ article }) => {
           </Link>
           <span className="date">{validDate(article.createdAt)}</span>
         </div>
-        <Favourite
+        <FavouriteBtn
           favoitesCount={article.favoritesCount}
           favorited={article.favorited}
           slug={article.slug}

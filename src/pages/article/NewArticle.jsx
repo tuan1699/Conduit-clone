@@ -58,7 +58,6 @@ const NewArticle = () => {
 
   const handleSubmitArticle = (e) => {
     e.preventDefault();
-    console.log("submit");
     if (title.trim() === "") {
       setErrors("title can't be blank");
     } else if (about.trim() === "") {
