@@ -13,7 +13,7 @@ const Setting = () => {
 
   const [imageURL, setImageURL] = useState(currentUser?.image);
   const [username, setUserName] = useState(currentUser?.username);
-  const [bio, setBio] = useState(currentUser?.bio);
+  const [bio, setBio] = useState(currentUser?.bio || "");
   const [email, setEmail] = useState(currentUser?.email);
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState(null);
@@ -34,6 +34,7 @@ const Setting = () => {
         user: userUpdated,
       })
         .then((data) => {
+          console.log(data.user);
           handleUpdateUser(data.user);
         })
         .catch((err) => console.log(err));

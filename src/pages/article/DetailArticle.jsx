@@ -52,12 +52,11 @@ const DetailArticle = () => {
           comment: {
             body: newComment,
           },
-        })
-          .then((data) => {
-            const newComments = [...comments, data.comment];
-            setComments(newComments);
-          })
-          .catch((err) => console.log(err));
+        }).then((data) => {
+          const newComments = [...comments, data.comment];
+          setComments(newComments);
+        });
+        // .catch((err) => console.log("Error", err));
       }
     },
     [comments]

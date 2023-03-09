@@ -5,25 +5,6 @@ import { Outlet } from "react-router-dom";
 import axios from "axios";
 
 const App = () => {
-  axios.interceptors.request.use(
-    function (config) {
-      const token = localStorage.getItem("token") || null;
-      if (token) {
-        config = {
-          ...config,
-          headers: {
-            ...config.headers,
-            Authorization: "Token " + token,
-          },
-        };
-      }
-      return config;
-    },
-    function (error) {
-      return Promise.reject(error);
-    }
-  );
-
   return (
     <div>
       <Header />

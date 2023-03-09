@@ -33,23 +33,24 @@ const Register = () => {
     };
     register({
       user: userRegister,
-    })
-      .then((data) => {
-        console.log(data.user);
+    }).then((data) => {
+      if (data.errors) {
+        setErrors(
+          Object.keys(data.errors).toString() +
+            " " +
+            Object.values(data.errors).toString()
+        );
+      } else {
         handleSetDataLogin(data.user);
+        localStorage.setItem("token", data.user.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         setErrors(null);
         setEmail("");
         setPassword("");
         setUserName("");
         navigate(`/`);
-      })
-      .catch((err) => {
-        setErrors(
-          Object.keys(err.response.data.errors) +
-            " " +
-            Object.values(err.response.data.errors)
-        );
-      });
+      }
+    });
   };
 
   return (

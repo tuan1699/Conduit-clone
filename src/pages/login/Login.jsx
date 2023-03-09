@@ -9,7 +9,6 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState(null);
-
   const { handleSetDataLogin, state } = useAuthContext();
   const { user } = state;
 
@@ -27,23 +26,23 @@ const Login = () => {
     };
     login({
       user: userLogin,
-    })
-      .then((userData) => {
-        console.log(userData);
-        handleSetDataLogin(userData.user);
-        localStorage.setItem("token", userData.user.token);
-        localStorage.setItem("user", JSON.stringify(userData.user));
+    }).then((data) => {
+      if (data.errors) {
+        setErrors(
+          Object.keys(data.errors).toString() +
+            " " +
+            Object.values(data.errors).toString()
+        );
+      } else {
+        console.log(data);
+        handleSetDataLogin(data.user);
+        localStorage.setItem("token", data.user.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
         setErrors(null);
         setEmail("");
         setPassword("");
-      })
-      .catch((err) =>
-        setErrors(
-          Object.keys(err.response.data.errors) +
-            " " +
-            Object.values(err.response.data.errors)
-        )
-      );
+      }
+    });
   };
 
   return (

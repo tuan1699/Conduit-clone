@@ -9,7 +9,7 @@ import Tag from "../article/Tag";
 import { isEqual } from "lodash";
 
 const EditPage = () => {
-  const [dataArticle, setDataArticle] = useState({});
+  const [dataArticle, setDataArticle] = useState();
   const [title, setTitle] = useState("");
   const [about, setAbout] = useState("");
   const [content, setContent] = useState("");
@@ -94,11 +94,11 @@ const EditPage = () => {
         tagList: tags,
       };
       console.log("enable update");
-      console.log(newArticle);
       updateArticle(slug, {
         article: newArticle,
       })
         .then((data) => {
+          console.log(data);
           const slug = data.article.slug;
           console.log(slug);
           navigate(`/article/${slug}`);

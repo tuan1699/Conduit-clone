@@ -74,7 +74,7 @@ const Content = () => {
         setTotalPage(totalPage);
       });
     }
-  }, [currentPage, currentTab, isAuthenticated, selectedTag, user]);
+  }, [currentPage, currentTab, isAuthenticated, selectedTag]);
 
   useEffect(() => {
     fetchTags()
